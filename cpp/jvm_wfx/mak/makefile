@@ -16,6 +16,19 @@ ifdef BUILD_INFO
      META_INFO=-DPREDEFINED_BUILD_NO=\"$(BUILD_INFO)\"
 endif
 
+ifndef JAVA_HOME
+	JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.8.0_151.jdk/Contents/Home
+endif
+
+UNAME_S := $(shell uname -s)
+ifeq ($(UNAME_S),Linux)
+	JNI_SPECIFIC_PATH = ${JAVA_HOME}/include/linux
+endif
+ifeq ($(UNAME_S),Darwin)
+    JNI_SPECIFIC_PATH = ${JAVA_HOME}/include/darwin
+endif
+
+
 RM := rm -rf
 
 # All of the sources participating in the build are defined here
