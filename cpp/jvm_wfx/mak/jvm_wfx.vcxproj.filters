@@ -1,0 +1,77 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="..\src\dllmain.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\FileEnumerator.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\jvm_wfx.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\JVMAccessor.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\JVMState.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Logger.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\org_cgc_wfx_NativeProgress.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ProgressInfo.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\include\common.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\FileEnumerator.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\gendef.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\JVMAccessor.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\JvmWfxVersion.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\JVMState.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Logger.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\org_cgc_wfx_NativeProgress.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\ProgressInfo.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Utilities.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\wfxplugin.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Include">
+      <UniqueIdentifier>{c4c0084b-e079-49a0-a493-5cc74e16a162}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources">
+      <UniqueIdentifier>{0a89ac06-9b21-4860-b381-624df873289b}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\include\calling.inc">
+      <Filter>Include</Filter>
+    </None>
+  </ItemGroup>
+</Project>
