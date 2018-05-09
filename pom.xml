@@ -1,0 +1,51 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.cgc.wfx</groupId>
+    <artifactId>wfx-parent</artifactId>
+    <version>0.1.0</version>
+    <packaging>pom</packaging>
+    <description>WFX Maven Parent</description>
+
+    <properties>
+        <maven.compiler.plugin.version>3.3</maven.compiler.plugin.version>
+        <maven.compiler.target.version>1.8</maven.compiler.target.version>
+        <maven.compiler.source.version>1.8</maven.compiler.source.version>
+        <scala.version>2.11.7</scala.version>
+        <scala.compat.version>2.11</scala.compat.version>
+    </properties>
+
+
+    <modules>
+        <module>scala</module>
+        <!-- <module>cpp</module> -->
+    </modules>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>at.nonblocking</groupId>
+                <artifactId>nonsnapshot-maven-plugin</artifactId>
+                <version>3.0.1</version>
+                <configuration>
+                    <baseVersion>${project.finalVersion}</baseVersion>
+                    <scmType>GIT</scmType>
+                    <scmUser>${scmUser}</scmUser>
+                    <deferPomCommit>true</deferPomCommit>
+                    <generateIncrementalBuildScripts>true</generateIncrementalBuildScripts>
+                    <generateChangedProjectsPropertyFile>true</generateChangedProjectsPropertyFile>
+                    <upstreamDependencies>
+                        <upstreamDependency>at.nonblocking:*:3.0.1</upstreamDependency>
+                    </upstreamDependencies>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.7</version>
+                <configuration>
+                    <skipTests>true</skipTests>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>

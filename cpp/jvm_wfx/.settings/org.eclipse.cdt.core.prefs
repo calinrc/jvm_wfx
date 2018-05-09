@@ -1,6 +1,16 @@
 eclipse.preferences.version=1
+environment/project/cdt.managedbuild.config.gnu.so.debug.975978767.1086344328/JAVA_HOME/delimiter=\:
+environment/project/cdt.managedbuild.config.gnu.so.debug.975978767.1086344328/JAVA_HOME/operation=append
+environment/project/cdt.managedbuild.config.gnu.so.debug.975978767.1086344328/JAVA_HOME/value=/Library/Java/JavaVirtualMachines/jdk1.8.0_151.jdk/Contents/Home
+environment/project/cdt.managedbuild.config.gnu.so.debug.975978767.1086344328/append=true
+environment/project/cdt.managedbuild.config.gnu.so.debug.975978767.1086344328/appendContributed=true
 environment/project/cdt.managedbuild.config.gnu.so.debug.975978767/JAVA_HOME/delimiter=\:
 environment/project/cdt.managedbuild.config.gnu.so.debug.975978767/JAVA_HOME/operation=append
-environment/project/cdt.managedbuild.config.gnu.so.debug.975978767/JAVA_HOME/value=/usr/lib/jvm/java-8-openjdk-amd64
+environment/project/cdt.managedbuild.config.gnu.so.debug.975978767/JAVA_HOME/value=/Library/Java/JavaVirtualMachines/jdk1.8.0_151.jdk/Contents/Home
 environment/project/cdt.managedbuild.config.gnu.so.debug.975978767/append=true
 environment/project/cdt.managedbuild.config.gnu.so.debug.975978767/appendContributed=true
+environment/project/cdt.managedbuild.config.gnu.so.release.347312197/JAVA_HOME/delimiter=\:
+environment/project/cdt.managedbuild.config.gnu.so.release.347312197/JAVA_HOME/operation=append
+environment/project/cdt.managedbuild.config.gnu.so.release.347312197/JAVA_HOME/value=/Library/Java/JavaVirtualMachines/jdk1.8.0_151.jdk/Contents/Home
+environment/project/cdt.managedbuild.config.gnu.so.release.347312197/append=true
+environment/project/cdt.managedbuild.config.gnu.so.release.347312197/appendContributed=true

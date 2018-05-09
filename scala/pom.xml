@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<project
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0">
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>wfx-jvm</artifactId>
+    <version>0.1.0</version>
+    <packaging>pom</packaging>
+    <parent>
+        <groupId>org.cgc.wfx</groupId>
+        <artifactId>wfx-parent</artifactId>
+        <version>0.1.0</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+    <modules>
+        <module>wfx_launcher</module>
+        <module>cos_jvm_wfx</module>
+    </modules>
+    <build>
+        <finalName>${project.artifactId}-${project.finalVersion}</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven.compiler.plugin.version}</version>
+            </plugin>
+        </plugins>
+    </build>
+</project>
