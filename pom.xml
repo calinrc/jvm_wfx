@@ -5,7 +5,7 @@
     <artifactId>wfx-parent</artifactId>
     <version>0.1.0</version>
     <packaging>pom</packaging>
-    <description>WFX Maven Parent</description>
+    <description>JVM WFX Maven Parent</description>
 
     <properties>
         <maven.compiler.plugin.version>3.3</maven.compiler.plugin.version>

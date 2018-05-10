@@ -10,43 +10,42 @@
 
  ********************************************************************************************************************* */
 
-package org.cgc.wfx.impl;
+package org.cgc.wfx.impl
 
-import java.io.Closeable;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+
+import java.io.Closeable
+import java.io.InputStream
+import java.io.OutputStream
 
 object IOUtils {
 
-	def deplate(InputStream is, OutputStream os,
-			FileUpdateMonitor monitor):Boolean {
-		try {
-			byte[] buff = new byte[2 * 1024 * 1024];
-			int readBytes = 0;
+  def deplete(is: InputStream, os: OutputStream, monitor: FileUpdateMonitor): Boolean = {
+    try {
+      val buff = Array.fill[Byte](2 * 1024 * 1024){0}
+      var cancel:Boolean = false
+      var readBytes = is.read(buff)
+      while ((readBytes > -1) && !cancel) {
+        os.write(buff, 0, readBytes)
+        cancel = monitor.updateMovedBytes(readBytes)
+        readBytes = is.read(buff)
+      }
+      cancel
+    } finally {
+      close(is, os)
+    }
 
-			boolean cancel = false;
-			while ((readBytes = is.read(buff)) > -1 && !cancel) {
-				os.write(buff, 0, readBytes);
-				cancel = monitor.updateMovedBytes(readBytes);
-			}
-			return cancel;
-		} finally {
-			close(is, os);
-		}
+  }
 
-	}
-
-	def close(Closeable... cls):Unit {
-		for (Closeable item : cls) {
-			try {
-				if (item != null) {
-					item.close();
-				}
-			} catch (Exception ex) {
-
-			}
-		}
-	}
+  def close(cls: Closeable*): Unit = {
+    cls.map(item => {
+      try {
+        if (item != null) {
+          item.close()
+        }
+      } catch {
+        case ex: Exception => //do nothing
+      }
+    })
+  }
 
 }

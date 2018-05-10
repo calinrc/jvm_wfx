@@ -10,39 +10,29 @@
 
  ********************************************************************************************************************* */
 
-package org.cgc.wfx.impl;
+package org.cgc.wfx.impl
 
-import org.cgc.wfx.Progress;
 
-public class FileUpdateMonitor {
+import org.cgc.wfx.Progress
 
-	Progress progress;
-	int lastProgress = 0;
-	long totalFileSize = 0;
-	long exchangedBites = 0;
+case class FileUpdateMonitor(val progressOpt: Option[Progress], totalFileSize: Long) {
 
-	/**
-	 * @param progress
-	 * @param totalFileSize
-	 */
-	public FileUpdateMonitor(Progress progress, long totalFileSize) {
-		this.progress = progress;
-		this.totalFileSize = totalFileSize;
-	}
+  var lastProgress: Integer = 0
+  var exchangedBites = 0L
 
-	/**
-	 * @param updateBitesNo
-	 */
-	public boolean updateMovedBytes(long updateBitesNo) {
-		if (this.progress != null) {
-			exchangedBites += updateBitesNo;
-			int actualProgress = (int) (exchangedBites * 100 / totalFileSize);
-			if (actualProgress > lastProgress) {
-				lastProgress = actualProgress;
-				return progress.notifyProgress(lastProgress);
-			}
-		}
-		return false;
-	}
+  /**
+    * @param updateBitesNo
+    */
+  def updateMovedBytes(updateBitesNo: Long): Boolean = {
+    progressOpt.map(progress => {
+      exchangedBites += updateBitesNo
+      val actualProgress = (exchangedBites * 100 / totalFileSize).toInt
+      if (actualProgress > lastProgress) {
+        lastProgress = actualProgress
+        progress.notifyProgress(lastProgress)
+      } else
+        false
+    }).getOrElse(false)
+  }
 
 }

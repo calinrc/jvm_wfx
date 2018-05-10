@@ -15,6 +15,7 @@
     <modules>
         <module>wfx_launcher</module>
         <module>cos_jvm_wfx</module>
+        <module>cos_jvm_wfx_test</module>
     </modules>
     <build>
         <finalName>${project.artifactId}-${project.finalVersion}</finalName>
