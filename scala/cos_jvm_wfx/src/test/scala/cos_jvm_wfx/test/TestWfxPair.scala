@@ -12,8 +12,7 @@
 
 package cos_jvm_wfx.test
 
-public class TestWfxPair {
-	
-	
+case class TestWfxPair() {
+
 
 }

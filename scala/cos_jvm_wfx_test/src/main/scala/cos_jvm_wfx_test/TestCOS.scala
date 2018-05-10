@@ -24,54 +24,52 @@ import org.cgc.wfx.WfxPair;
 object TestCOS extends App {
 
   try {
-    val homePath = System.getProperty("user.home");
+    val homePath = System.getProperty("user.home")
 
     val pair = FSClientLauncher
-      .getPairInstance(homePath + File.separatorChar + Constants.DEPENDENCIES_PATH);
-    System.out.println("Init");
-    pair.initFS();
-    val content = pair.getFolderContent("/");
-/*
-    for (String item
-    : content
-    ) {
-      System.out.println("\t" + item);
-      FileInformation fi = pair.getFileInformation("/", item);
-      System.out.println("File " + fi);
-    }
+      .getPairInstance(homePath + File.separatorChar + Constants.DEPENDENCIES_PATH)
+    System.out.println("Init")
+    pair.initFS()
+    val content = pair.getFolderContent("/")
 
-    long currentTimeMillis = System.currentTimeMillis();
-    String newFolderPath = "/user/newFolder_" + currentTimeMillis;
-    System.out.println("Try to create folder 1 " + newFolderPath);
-    pair.mkDir(newFolderPath);
+    content.foreach(item => {
+      println("\t" + item)
+      val fi = pair.getFileInformation("/", item)
+      println("File " + fi)
+    })
 
-    pair.deletePath(newFolderPath);
 
-    String newFolderWithoutParent = "/user/newFolderUnexist_" + (currentTimeMillis + 1) + "/folder2_"
-    +(currentTimeMillis + 2);
-    System.out.println("Try to create folder2 " + newFolderWithoutParent);
-    pair.mkDir(newFolderWithoutParent);
+    val currentTimeMillis = System.currentTimeMillis()
+    val newFolderPath = "/user/newFolder_" + currentTimeMillis
+    println("Try to create folder 1 " + newFolderPath)
+    pair.mkDir(newFolderPath)
 
-    pair.deletePath("/user/newFolderUnexist_" + (currentTimeMillis + 1));
+    pair.deletePath(newFolderPath)
 
-    pair.mkDir("/user/folderToRename");
-    pair.renamePath("/user/folderToRename", "/user/folderToRenameChanged_" + System.currentTimeMillis());
+    val newFolderWithoutParent = "/user/newFolderUnexist_" + (currentTimeMillis + 1) + "/folder2_" + (currentTimeMillis + 2)
+    println("Try to create folder2 " + newFolderWithoutParent)
+    pair.mkDir(newFolderWithoutParent)
 
-    pair.mkDir("/user/upload");
+    pair.deletePath("/user/newFolderUnexist_" + (currentTimeMillis + 1))
+
+    pair.mkDir("/user/folderToRename")
+    pair.renamePath("/user/folderToRename", "/user/folderToRenameChanged_" + System.currentTimeMillis())
+
+    pair.mkDir("/user/upload")
     pair.putFile(homePath + File.separatorChar + ".config/jvm_wfx/java/log4j.xml",
-      "/user/upload/log4j.xml", true, null);
+      "/user/upload/log4j.xml", true, null)
 
-    pair.getFile("/user/upload/log4j.xml", new File(".").getAbsolutePath() + File.separatorChar + ".cucu", null);
+    pair.getFile("/user/upload/log4j.xml", new File(".").getAbsolutePath() + File.separatorChar + ".cucu", null)
 
-    Runtime runtime = Runtime.getRuntime();
+    val runtime = Runtime.getRuntime()
 
-    final int MB = 1024 * 1024;
+    val MB = 1024 * 1024
 
-    System.out.println("Free Memory: " + (runtime.freeMemory() / MB));
-    System.out.println("Max Memory: " + (runtime.maxMemory() / MB));
-    System.out.println("Total Memory: " + (runtime.totalMemory() / MB));
-    System.out.println("Used Memory: " + ((runtime.totalMemory() - runtime.freeMemory()) / MB));
-*/
+    println("Free Memory: " + (runtime.freeMemory() / MB))
+    println("Max Memory: " + (runtime.maxMemory() / MB))
+    println("Total Memory: " + (runtime.totalMemory() / MB))
+    println("Used Memory: " + ((runtime.totalMemory() - runtime.freeMemory()) / MB))
+
     println("End")
 
   } catch {
