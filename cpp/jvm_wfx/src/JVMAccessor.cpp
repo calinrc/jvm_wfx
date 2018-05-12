@@ -59,9 +59,13 @@ int JVMAccessor::initialize()
         char dependenciesPath[MAX_PATH];
         size_t pathSize = MAX_PATH;
         memset(dependenciesPath, 0, sizeof(dependenciesPath));
+        char confPath[MAX_PATH];
+        memset(confPath, 0, sizeof(confPath));
+
         bool isNewEnv = false;
         JNIEnv* env = JVMState::instance()->getEnv(&isNewEnv);
         Utilities::getJavaDependenciesPath(dependenciesPath, &pathSize);
+        Utilities::getConfPath(confPath, &pathSize);
 
         jclass wfxLauncherClass = env->FindClass("org/cgc/wfx/FSClientLauncher");
 
@@ -72,11 +76,12 @@ int JVMAccessor::initialize()
         }
 
         jstring depsPathStr = env->NewStringUTF(dependenciesPath);
+        jstring confPathStr = env->NewStringUTF(confPath);
         jmethodID getPairInstanceMethodId = env->GetStaticMethodID(wfxLauncherClass, "getPairInstance",
                                                                    "(Ljava/lang/String;)Lorg/cgc/wfx/WfxPair;");
         assert(getPairInstanceMethodId != NULL);
 
-        jobject wfxPairObj = env->CallStaticObjectMethod(wfxLauncherClass, getPairInstanceMethodId, depsPathStr);
+        jobject wfxPairObj = env->CallStaticObjectMethod(wfxLauncherClass, getPairInstanceMethodId, depsPathStr, confPathStr);
 
         if (!JVMState::instance()->exceptionExists(env) && wfxPairObj != NULL)
         {

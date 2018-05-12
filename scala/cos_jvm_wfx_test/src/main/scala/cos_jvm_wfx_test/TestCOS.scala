@@ -23,11 +23,15 @@ import org.cgc.wfx.WfxPair;
 
 object TestCOS extends App {
 
+  val DEPENDENCIES_PATH = ".config/jvm_wfx/jvm/deps"
+  val CONF_PATH = ".config/jvm_wfx/java/config.json"
+
+
   try {
     val homePath = System.getProperty("user.home")
 
     val pair = FSClientLauncher
-      .getPairInstance(homePath + File.separatorChar + Constants.DEPENDENCIES_PATH)
+      .getPairInstance(homePath + File.separatorChar + DEPENDENCIES_PATH, homePath + File.separatorChar + CONF_PATH)
     System.out.println("Init")
     pair.initFS()
     val content = pair.getFolderContent("/")

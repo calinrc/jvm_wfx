@@ -3,9 +3,9 @@ package org.cgc.wfx
 import org.cgc.wfx.exception.WfxJvmException
 
 object FSClientLauncher {
-  private val PAIR_CLASS = "org.cgc.wfx.impl.FileSystemProxy"
+  private val PAIR_CLASS = "org.cgc.wfx.impl.CosFileSystem"
 
-  def getPairInstance(dependencyFolder: String): WfxPair = {
+  def getPairInstance(dependencyFolder: String, pairsConfPath:String): WfxPair = {
     try {
       System.out.println("Try getting WfxPair instance")
       val loader = new DepsLoader(dependencyFolder)

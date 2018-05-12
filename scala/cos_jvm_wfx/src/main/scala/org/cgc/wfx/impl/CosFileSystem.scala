@@ -1,5 +1,5 @@
 /*
- *    FileSystemProxy.java file written and maintained by Calin Cocan
+ *    CosFileSystem.scala file written and maintained by Calin Cocan
  *    Created on: Oct 05, 2015
  *
  * This work is free: you can redistribute it and/or modify it under the terms of Apache License Version 2.0

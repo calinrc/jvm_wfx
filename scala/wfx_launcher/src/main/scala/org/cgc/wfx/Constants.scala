@@ -13,8 +13,5 @@
 package org.cgc.wfx
 
 object Constants {
-
-	val DEPENDENCIES_PATH = ".config/jvm_wfx/jvm/deps"
 	val JVM_WFX_NATIVE_LIBRARY = ".config/jvm_wfx/jvm_wfx.wfx"
-	
 }

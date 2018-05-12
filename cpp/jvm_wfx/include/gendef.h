@@ -24,6 +24,7 @@
 #define LOGGER_LOCATION PLUGIN_LOCATION "/java/log4j.xml"
 #define FULL_LOG_PATH PLUGIN_LOCATION "/logs/jvm_wfx.log"
 #define DEPENDENCIES_PATH PLUGIN_LOCATION "/java/deps"
+#define CONF_LOCATION PLUGIN_LOCATION "/java/config.json"
 
 #define PATH_SEPARATOR ":"
 #define FILE_SEPARATOR "/"

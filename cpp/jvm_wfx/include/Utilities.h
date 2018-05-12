@@ -112,6 +112,12 @@ public:
         return getAbsolutePath(DEPENDENCIES_PATH, retPath, size);
     }
 
+    static char* getConfPath(char* retPath, size_t* size)
+    {
+        return getAbsolutePath(CONF_LOCATION, retPath, size);
+    }
+
+
 private:
     Utilities();
     virtual ~Utilities();
