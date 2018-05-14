@@ -1,6 +1,5 @@
 package org.cgc.wfx
 
-import spray.json._
 import spray.json.DefaultJsonProtocol
 
 case class WfxPairsConfigurations(configurations: Seq[PairConfig])

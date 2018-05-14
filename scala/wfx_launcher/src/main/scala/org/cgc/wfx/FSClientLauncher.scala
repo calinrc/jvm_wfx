@@ -1,8 +1,7 @@
 package org.cgc.wfx
 
-import org.cgc.wfx.FSClientLauncher.loadConf
+import org.cgc.wfx.WfxPairConfigurationJsonFormat._
 import org.cgc.wfx.exception.WfxJvmException
-import WfxPairConfigurationJsonFormat._
 
 import scala.io.Source
 
