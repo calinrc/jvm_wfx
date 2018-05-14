@@ -5,7 +5,7 @@ import spray.json.DefaultJsonProtocol
 
 case class WfxPairsConfigurations(configurations: Seq[PairConfig])
 
-case class PairConfig(className: String, properties: Option[Map[String, String]])
+case class PairConfig(className: Option[String], properties: Option[Map[String, String]])
 
 
 object WfxPairConfigurationJsonFormat extends DefaultJsonProtocol {
