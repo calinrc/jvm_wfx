@@ -14,58 +14,11 @@ package org.cgc.wfx.impl
 
 ;
 
-import com.amazonaws.services.s3.model.S3Object
+import com.amazonaws.services.s3.model.Bucket
 import org.cgc.wfx.FileInformation
 
-object CosFileInformation {
-  val FILE_ATTRIBUTE_UNIX_MODE = 0x80000000L
-  val FILE_ATTRIBUTE_DIRECTORY = 0x00000010L
 
-  val S_IFDIR = 40000
-  val S_IFLNK = 120000
-
-  val _IRUSR = 400
-  /* Read by owner. */
-  val S_IWUSR = 200
-  /* Write by owner. */
-  val S_IXUSR = 100 /* Execute by owner. */
-
-  // private static int S_IRGRP = (S_IRUSR >> 3); /* Read by group. */
-  // private static int S_IWGRP = (S_IWUSR >> 3); /* Write by group. */
-  // private static int S_IXGRP = (S_IXUSR >> 3); /* Execute by group. */
-  //
-  // private static int S_IROTH = (S_IRGRP >> 3); /* Read by others. */
-  // private static int S_IWOTH = (S_IWGRP >> 3); /* Write by others. */
-  // private static int S_IXOTH = (S_IXGRP >> 3); /* Execute by others. */
-
-  /**
-    * @param javaTime
-    *            - in milliseconds since January 1, 1970 UTC.
-    * @return fileTime - number of 100-nanosecond intervals since January 1,
-    *         1601.
-    */
-  def javaTimeToFileTime(javaTime: Long): Long = {
-    (javaTime * 10000) + 116444736000000000L
-  }
-
-
-  def fsActionToUnixVal(/*some param here*/): Int = {
-    var retVal = 0
-    //		if (action.implies(FsAction.READ)) {
-    //			retVal |= S_IRUSR;
-    //		}
-    //		if (action.implies(FsAction.WRITE)) {
-    //			retVal |= S_IWUSR;
-    //		}
-    //		if (action.implies(FsAction.EXECUTE)) {
-    //			retVal |= S_IXUSR;
-    //		}
-    retVal
-  }
-
-}
-
-case class CosFileInformation(obj:S3Object) extends FileInformation {
+case class CosBucketFileInformation(bucket:Bucket) extends FileInformation {
 
   var fileAttributes: Long = 0L
   var fileCreationTime = 0L

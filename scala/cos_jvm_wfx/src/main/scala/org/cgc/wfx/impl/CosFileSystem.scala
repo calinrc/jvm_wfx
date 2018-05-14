@@ -14,13 +14,17 @@ package org.cgc.wfx.impl
 
 ;
 
+import java.io.File
+
 import com.amazonaws.auth.BasicAWSCredentials
 import com.amazonaws.services.s3.AmazonS3Client
 import org.apache.log4j.Logger
 import org.cgc.wfx._
-import scala.collection.JavaConversions._
 
-case class CosFileSystem(val cosOpt: Option[AmazonS3Client] = None ) extends WfxPair {
+import scala.collection.JavaConversions._
+import scala.util.Try
+
+case class CosFileSystem(val cosOpt: Option[AmazonS3Client] = None) extends WfxPair {
   val log = Logger.getLogger(CosFileSystem.getClass)
   log.debug("WfxPair instance of CosFileSystem");
 
@@ -43,7 +47,14 @@ case class CosFileSystem(val cosOpt: Option[AmazonS3Client] = None ) extends Wfx
     * @return String[]
     */
   override def getFolderContent(folderPath: String): Array[String] = {
-    cosOpt.map(_.listBuckets().map(_.getName).toArray).getOrElse(Array[String]())
+    val folders = folderPath.split(File.separatorChar).toList
+    cosOpt.map { cos =>
+      folders match {
+        case Nil => cos.listBuckets().map(_.getName).toArray
+        case head :: Nil => cos.listObjects(head).getObjectSummaries.map(_.getKey).toArray
+        case head :: rest => cos.listObjects(head, rest.mkString("/")).getObjectSummaries.map(_.getKey).toArray
+      }
+    }.getOrElse(Array[String]())
   }
 
   /**
@@ -51,17 +62,31 @@ case class CosFileSystem(val cosOpt: Option[AmazonS3Client] = None ) extends Wfx
     * @param fileName
     * @return FileInformation
     */
-  override def getFileInformation(parentFolder: String, fileName: String): FileInformation = ???
+  override def getFileInformation(parentFolder: String, fileName: String): FileInformation = {
+    val folders = parentFolder.split(File.separatorChar).toList
+    cosOpt.map { cos =>
+      folders match {
+        case Nil => CosBucketFileInformation(cos.listBuckets().filter(_.getName.equals(fileName)).head)
+        case head :: Nil => CosFileInformation(cos.getObject(head, fileName))
+        case head :: rest => CosFileInformation(cos.getObject(head, rest.mkString("/") + fileName))
+      }
+    }.get
+  }
 
   /**
     * @param filePath
     * @return boolean
     */
   override def mkDir(filePath: String): Boolean = {
-    cosOpt.map(cos=> cos.createBucket(filePath)) match {
-      case Some(bucket ) => true
-      case None => false
-    }
+    val folders = filePath.split(File.separatorChar).toList
+    cosOpt.map(cos =>
+      folders match {
+        case Nil => /*do nothing */ true
+        case head :: Nil => Try {
+          cos.createBucket(head)
+        }.toOption.map(_ => true).getOrElse(false)
+        case head :: tail => false ////sdas Try{cos..createBucket(head)}.toOption.map(_=> true).getOrElse(false)
+      }).getOrElse(false)
   }
 
   /**
@@ -69,7 +94,7 @@ case class CosFileSystem(val cosOpt: Option[AmazonS3Client] = None ) extends Wfx
     * @return boolean
     */
   override def deletePath(path: String): Boolean = {
-    cosOpt.map(cos=>cos.deleteBucket(path)) match {
+    cosOpt.map(cos => cos.deleteBucket(path)) match {
       case Some(_) => true
       case None => false
     }
@@ -117,7 +142,7 @@ case class CosFileSystem(val cosOpt: Option[AmazonS3Client] = None ) extends Wfx
     * @return boolean
     */
   override def fileExists(repotePath: String): Boolean = {
-    cosOpt.map(cos=>cos.doesBucketExist(repotePath)) match {
+    cosOpt.map(cos => cos.doesBucketExist(repotePath)) match {
       case Some(exist) => exist
       case None => false
     }
