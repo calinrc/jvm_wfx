@@ -22,7 +22,6 @@
 #include "ProgressInfo.h"
 
 JVMAccessor* JVMAccessor::s_instance = new JVMAccessor();
-jmethodID JVMAccessor::s_WfxPairMetIdInitFS = NULL;
 jmethodID JVMAccessor::s_WfxPairMetIdGetFolderContent = NULL;
 jmethodID JVMAccessor::s_WfxPairMetIdGetFileInfo = NULL;
 jmethodID JVMAccessor::s_WfxPairMetIdMkDir = NULL;
@@ -87,9 +86,6 @@ int JVMAccessor::initialize()
         {
             jclass wfxPairClass = env->GetObjectClass(wfxPairObj);
 
-            s_WfxPairMetIdInitFS = env->GetMethodID(wfxPairClass, "initFS", "()V");
-            assert(s_WfxPairMetIdInitFS != NULL);
-
             s_WfxPairMetIdGetFolderContent = env->GetMethodID(wfxPairClass, "getFolderContent", "(Ljava/lang/String;)[Ljava/lang/String;");
             assert(s_WfxPairMetIdGetFolderContent != NULL);
 
@@ -128,11 +124,6 @@ int JVMAccessor::initialize()
             if (!JVMState::instance()->exceptionExists(env))
             {
                 m_wfxPairObj = env->NewGlobalRef(wfxPairObj);
-                env->CallVoidMethod(m_wfxPairObj, s_WfxPairMetIdInitFS);
-                if (JVMState::instance()->exceptionExists(env))
-                {
-                    assert(false);
-                }
             } else
             {
                 LOGGING("Fail on obtaining WfxPair instance. Please check the existence of jvm_wfx.jar inside of ~/.config/jvm_wfx/java/deps/ folder")

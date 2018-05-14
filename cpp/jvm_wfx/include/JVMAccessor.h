@@ -63,7 +63,6 @@ private:
     static JVMAccessor* s_instance;
 
 public:
-    static jmethodID s_WfxPairMetIdInitFS;
     static jmethodID s_WfxPairMetIdGetFolderContent;
     static jmethodID s_WfxPairMetIdGetFileInfo;
     static jmethodID s_WfxPairMetIdMkDir;
