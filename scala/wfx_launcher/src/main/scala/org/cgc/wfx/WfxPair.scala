@@ -2,7 +2,7 @@ package org.cgc.wfx
 
 trait WfxPair {
 
-  def initFS(conf : PairConfig): this.type
+  def initFS(conf : PairConfig): WfxPair
 
   /**
     * @param folderPath

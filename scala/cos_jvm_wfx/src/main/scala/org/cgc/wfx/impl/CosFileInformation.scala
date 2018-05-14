@@ -64,7 +64,7 @@ object CosFileInformation {
 
 }
 
-case class CosFileInformation() extends FileInformation {
+class CosFileInformation extends FileInformation {
 
   var fileAttributes: Long = 0L
   var fileCreationTime = 0L

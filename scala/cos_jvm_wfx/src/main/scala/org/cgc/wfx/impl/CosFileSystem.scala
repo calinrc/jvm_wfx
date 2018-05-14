@@ -14,31 +14,27 @@ package org.cgc.wfx.impl
 
 ;
 
-import java.io.File
-import java.io.FileInputStream
-import java.io.FileOutputStream
-import java.io.IOException
-import java.io.InputStream
-import java.io.OutputStream
-import java.net.URL
-import java.util.ArrayList
-import java.util.List
-
+import com.amazonaws.auth.BasicAWSCredentials
+import com.amazonaws.services.s3.AmazonS3Client
 import org.apache.log4j.Logger
 import org.cgc.wfx._
-import org.cgc.wfx.exception.WfxJvmException
+import scala.collection.JavaConversions._
 
-case class CosFileSystem() extends WfxPair {
+case class CosFileSystem(val cosOpt: Option[AmazonS3Client] = None ) extends WfxPair {
   val log = Logger.getLogger(CosFileSystem.getClass)
-  log.debug("WfxPair instance if  CosFileSystem");
+  log.debug("WfxPair instance of CosFileSystem");
 
   /*
    * @return int value translation of WfxErrorCodes
    */
-  override def initFS(conf : PairConfig):this.type = {
+  override def initFS(conf: PairConfig): WfxPair = {
     log.debug("Initialize FS");
-    ???
-    this
+    val endpointUrl = conf.properties.get(CosConstants.ENDPOINT_URL)
+    val user_id = conf.properties.get(CosConstants.ENDPOINT_URL)
+    val password = conf.properties.get(CosConstants.ENDPOINT_URL)
+    val cos = new AmazonS3Client(new BasicAWSCredentials(user_id, password))
+    cos.setEndpoint(endpointUrl)
+    new CosFileSystem(Some(cos))
   }
 
 
@@ -46,7 +42,9 @@ case class CosFileSystem() extends WfxPair {
     * @param folderPath
     * @return String[]
     */
-  override def getFolderContent(folderPath: String): Array[String] = ???
+  override def getFolderContent(folderPath: String): Array[String] = {
+    cosOpt.map(_.listBuckets().map(_.getName).toArray).getOrElse(Array[String]())
+  }
 
   /**
     * @param parentFolder
@@ -59,20 +57,32 @@ case class CosFileSystem() extends WfxPair {
     * @param filePath
     * @return boolean
     */
-  override def mkDir(filePath: String): Boolean = ???
+  override def mkDir(filePath: String): Boolean = {
+    cosOpt.map(cos=> cos.createBucket(filePath)) match {
+      case Some(bucket ) => true
+      case None => false
+    }
+  }
 
   /**
     * @param path
     * @return boolean
     */
-  override def deletePath(path: String): Boolean = ???
+  override def deletePath(path: String): Boolean = {
+    cosOpt.map(cos=>cos.deleteBucket(path)) match {
+      case Some(_) => true
+      case None => false
+    }
+  }
 
   /**
     * @param oldPath
     * @param newPath
     * @return boolean
     */
-  override def renamePath(oldPath: String, newPath: String): Boolean = ???
+  override def renamePath(oldPath: String, newPath: String): Boolean = {
+    false
+  }
 
 
   /**
@@ -80,26 +90,37 @@ case class CosFileSystem() extends WfxPair {
     * @param destPath
     * @return boolean
     */
-  override def copyPath(srcPath: String, destPath: String): Boolean = ???
+  override def copyPath(srcPath: String, destPath: String): Boolean = {
+    false
+  }
 
   /**
     * @param remotePath
     * @param localPath
     * @return boolean
     */
-  override def getFile(remotePath: String, localPath: String, progress: Progress): Unit = ???
+  override def getFile(remotePath: String, localPath: String, progress: Progress): Unit = {
+
+  }
 
   /**
     * @param localPath
     * @param remotePath
     * @return boolean
     */
-  override def putFile(localPath: String, remotePath: String, overwrite: Boolean, progress: Progress): Unit = ???
+  override def putFile(localPath: String, remotePath: String, overwrite: Boolean, progress: Progress): Unit = {
+
+  }
 
   /**
     * @param repotePath
     * @return boolean
     */
-  override def fileExists(repotePath: String): Boolean = ???
+  override def fileExists(repotePath: String): Boolean = {
+    cosOpt.map(cos=>cos.doesBucketExist(repotePath)) match {
+      case Some(exist) => exist
+      case None => false
+    }
+  }
 
 }
