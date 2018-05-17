@@ -12,7 +12,7 @@ import scala.reflect.io.{Directory, File}
 object ConfigApp extends App {
   println("Start")
 
-  val confVal = WfxPairsConfigurations(Seq(PairConfig(Some(CosFileSystem.getClass.getCanonicalName),
+  val confVal = WfxPairsConfigurations(Seq(PairConfig("name1", Some(CosFileSystem.getClass.getCanonicalName),
     Some(Map(CosConstants.ENDPOINT_URL -> "http://cosurl.cosss",
       CosConstants.ACCESS_KEY -> "myusername",
       CosConstants.SECRET_KEY -> "mypassword"
