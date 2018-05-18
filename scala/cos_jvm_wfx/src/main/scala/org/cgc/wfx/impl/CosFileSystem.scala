@@ -18,6 +18,7 @@ import java.io.File
 
 import com.amazonaws.auth.BasicAWSCredentials
 import com.amazonaws.services.s3.AmazonS3Client
+import com.amazonaws.services.s3.model.PutObjectRequest
 import org.apache.log4j.Logger
 import org.cgc.wfx._
 
@@ -25,7 +26,7 @@ import scala.collection.JavaConversions._
 import scala.util.Try
 
 case class CosFileSystem(val cosOpt: Option[AmazonS3Client] = None) extends WfxPair {
-  val log = Logger.getLogger(CosFileSystem.getClass)
+  val log = Logger.getLogger(this.getClass)
   log.debug("WfxPair instance of CosFileSystem");
 
   /*
@@ -78,6 +79,23 @@ case class CosFileSystem(val cosOpt: Option[AmazonS3Client] = None) extends WfxP
     * @return boolean
     */
   override def mkDir(filePath: String): Boolean = {
+    def createFolderIfDoesNotExist(part:String, parentBucket:Option[String], isBucket:Boolean):Try[Boolean] = {
+      cosOpt.map(cos =>
+        if (isBucket) {
+          if (!cos.doesBucketExist(part)) {
+            cos.createBucket(part)
+            true
+          }else{
+            false
+          }
+
+        }else{
+          val por = new PutObjectRequest()
+          cos.putObject("bucket", "key", "content")
+        }
+
+      )
+    }
     val folders = filePath.split(File.separatorChar).toList
     cosOpt.map(cos =>
       folders match {
@@ -85,7 +103,7 @@ case class CosFileSystem(val cosOpt: Option[AmazonS3Client] = None) extends WfxP
         case head :: Nil => Try {
           cos.createBucket(head)
         }.toOption.map(_ => true).getOrElse(false)
-        case head :: tail => false ////sdas Try{cos..createBucket(head)}.toOption.map(_=> true).getOrElse(false)
+        case head :: tail => Try{cos.bu.createBucket(head)}.toOption.map(_=> true).getOrElse(false)
       }).getOrElse(false)
   }
 

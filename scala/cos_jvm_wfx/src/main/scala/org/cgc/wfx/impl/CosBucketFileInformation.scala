@@ -12,7 +12,6 @@
 
 package org.cgc.wfx.impl
 
-;
 
 import com.amazonaws.services.s3.model.Bucket
 import org.cgc.wfx.FileInformation
@@ -28,60 +27,60 @@ case class CosBucketFileInformation(bucket:Bucket) extends FileInformation {
   var fileName = ""
 
   //	public CosFileInformation(FileStatus fstatus) {
-  //		boolean isDir = fstatus.isDirectory();
-  //		this.fileAttributes |= FILE_ATTRIBUTE_UNIX_MODE;
+  //		boolean isDir = fstatus.isDirectory()
+  //		this.fileAttributes |= FILE_ATTRIBUTE_UNIX_MODE
   //		if (isDir) {
-  //			this.fileAttributes |= FILE_ATTRIBUTE_DIRECTORY;
+  //			this.fileAttributes |= FILE_ATTRIBUTE_DIRECTORY
   //		}
   //
   //		this.fileCreationTime = javaTimeToFileTime(fstatus
-  //				.getModificationTime());
-  //		this.fileLastAccessTime = javaTimeToFileTime(fstatus.getAccessTime());
+  //				.getModificationTime())
+  //		this.fileLastAccessTime = javaTimeToFileTime(fstatus.getAccessTime())
   //		if (isDir == false) {
-  //			this.fileSize = fstatus.getLen();
+  //			this.fileSize = fstatus.getLen()
   //		} else {
-  //			this.fileSize = 0;
+  //			this.fileSize = 0
   //		}
-  //		this.reserved0 = 0;
+  //		this.reserved0 = 0
   //
   //		if ((this.fileAttributes & FILE_ATTRIBUTE_DIRECTORY) != 0) {
-  //			this.reserved0 |= S_IFDIR;
+  //			this.reserved0 |= S_IFDIR
   //		}
   //		if (fstatus.isSymlink()) {
-  //			this.reserved0 |= S_IFLNK;
+  //			this.reserved0 |= S_IFLNK
   //		}
-  //		FsPermission fperm = fstatus.getPermission();
-  //		this.reserved0 |= fsActionToUnixVal(fperm.getUserAction());
-  //		this.reserved0 |= (fsActionToUnixVal(fperm.getGroupAction()) >> 3);
-  //		this.reserved0 |= (fsActionToUnixVal(fperm.getOtherAction()) >> 6);
+  //		FsPermission fperm = fstatus.getPermission()
+  //		this.reserved0 |= fsActionToUnixVal(fperm.getUserAction())
+  //		this.reserved0 |= (fsActionToUnixVal(fperm.getGroupAction()) >> 3)
+  //		this.reserved0 |= (fsActionToUnixVal(fperm.getOtherAction()) >> 6)
   //
-  //		this.fileName = fstatus.getPath().getName();
+  //		this.fileName = fstatus.getPath().getName()
   //
   //	}
 
 
   override def getFileAttributes(): Long = {
-    return fileAttributes;
+    CosFileInformation.FILE_ATTRIBUTE_UNIX_MODE  | CosFileInformation.FILE_ATTRIBUTE_DIRECTORY
   }
 
   override def getFileCreationTime(): Long = {
-    return fileCreationTime;
+    CosFileInformation.javaTimeToFileTime(bucket.getCreationDate.getTime)
   }
 
   override def getFileLastAccessTime(): Long = {
-    return fileLastAccessTime;
+     fileLastAccessTime
   }
 
   override def getFileSize(): Long = {
-    return fileSize;
+     0
   }
 
   override def getReserved0(): Long = {
-    return reserved0;
+    CosFileInformation.S_IFDIR
   }
 
   override def getFileName(): String = {
-    return fileName;
+    bucket.getName
   }
 
   /*
