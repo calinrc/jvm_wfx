@@ -12,9 +12,7 @@
 
 package org.cgc.wfx.impl
 
-;
-
-import java.io.File
+import java.io.{ByteArrayInputStream, File}
 
 import com.amazonaws.auth.BasicAWSCredentials
 import com.amazonaws.services.s3.AmazonS3Client
@@ -23,7 +21,15 @@ import org.apache.log4j.Logger
 import org.cgc.wfx._
 
 import scala.collection.JavaConversions._
-import scala.util.Try
+import com.amazonaws.services.s3.model.ObjectMetadata
+
+
+object CosFileSystem {
+  val metadata = new ObjectMetadata
+  metadata.setContentLength(0)
+  // create empty content
+  val emptyContent = new ByteArrayInputStream(new Array[Byte](0))
+}
 
 case class CosFileSystem(val cosOpt: Option[AmazonS3Client] = None) extends WfxPair {
   val log = Logger.getLogger(this.getClass)
@@ -79,31 +85,40 @@ case class CosFileSystem(val cosOpt: Option[AmazonS3Client] = None) extends WfxP
     * @return boolean
     */
   override def mkDir(filePath: String): Boolean = {
-    def createFolderIfDoesNotExist(part:String, parentBucket:Option[String], isBucket:Boolean):Try[Boolean] = {
+
+    def createFolderIfDoesNotExist(part: String, parentBucket: Option[String]): Option[Boolean] = {
       cosOpt.map(cos =>
-        if (isBucket) {
-          if (!cos.doesBucketExist(part)) {
-            cos.createBucket(part)
-            true
-          }else{
-            false
+        parentBucket match {
+          case None => {
+            if (!cos.doesBucketExist(part)) {
+              cos.createBucket(part)
+              true
+            } else {
+              false
+            }
           }
-
-        }else{
-          val por = new PutObjectRequest()
-          cos.putObject("bucket", "key", "content")
+          case Some(bucket) => {
+            if (!cos.doesObjectExist(bucket, s"${part}/")) {
+              val por = new PutObjectRequest(parentBucket.get,
+                s"${part}/", CosFileSystem.emptyContent, CosFileSystem.metadata);
+              cos.putObject(por)
+              //TODO check result here
+              true
+            } else {
+              false
+            }
+          }
         }
-
       )
     }
+
     val folders = filePath.split(File.separatorChar).toList
     cosOpt.map(cos =>
       folders match {
         case Nil => /*do nothing */ true
-        case head :: Nil => Try {
-          cos.createBucket(head)
-        }.toOption.map(_ => true).getOrElse(false)
-        case head :: tail => Try{cos.bu.createBucket(head)}.toOption.map(_=> true).getOrElse(false)
+        case head :: Nil =>
+          createFolderIfDoesNotExist(head, None).getOrElse(false)
+        case head :: tail => createFolderIfDoesNotExist(tail.mkString("/"), Some(head)).getOrElse(false)
       }).getOrElse(false)
   }
 
@@ -112,10 +127,23 @@ case class CosFileSystem(val cosOpt: Option[AmazonS3Client] = None) extends WfxP
     * @return boolean
     */
   override def deletePath(path: String): Boolean = {
-    cosOpt.map(cos => cos.deleteBucket(path)) match {
-      case Some(_) => true
-      case None => false
-    }
+    val folders = path.split(File.separatorChar).toList
+    cosOpt.map(cos =>
+      folders match {
+        case Nil => /*do nothing */ true
+        case bucket :: Nil =>
+          if (cos.doesBucketExist(bucket)){
+            cos.deleteBucket(bucket)
+          }
+          true
+        case bucket :: tail => {
+          val key = tail.mkString("/")
+          if (cos.doesObjectExist(bucket,key))
+            cos.listObjects(bucket, key).getObjectSummaries().foreach(item => cos.deleteObject(bucket, item.getKey))
+            cos.deleteObject(bucket, key)
+            true
+        }
+      }).getOrElse(false)
   }
 
   /**
@@ -156,14 +184,21 @@ case class CosFileSystem(val cosOpt: Option[AmazonS3Client] = None) extends WfxP
   }
 
   /**
-    * @param repotePath
+    * @param remotePath
     * @return boolean
     */
-  override def fileExists(repotePath: String): Boolean = {
-    cosOpt.map(cos => cos.doesBucketExist(repotePath)) match {
-      case Some(exist) => exist
-      case None => false
-    }
+  override def fileExists(remotePath: String): Boolean = {
+    val splits = remotePath.split(File.separatorChar).toList
+    cosOpt.map(cos =>
+      splits match {
+        case Nil => /*do nothing */ true
+        case bucket :: Nil =>
+          cos.doesBucketExist(bucket)
+        case bucket :: tail => {
+          val key = tail.mkString("/")
+          cos.doesObjectExist(bucket,key)
+        }
+      }).getOrElse(false)
   }
 
 }
