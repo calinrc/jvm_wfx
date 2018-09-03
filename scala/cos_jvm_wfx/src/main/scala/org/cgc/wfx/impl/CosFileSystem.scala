@@ -99,7 +99,7 @@ case class CosFileSystem(val cosOpt: Option[AmazonS3Client] = None) extends WfxP
           }
           case Some(bucket) => {
             if (!cos.doesObjectExist(bucket, s"${part}/")) {
-              val por = new PutObjectRequest(parentBucket.get,
+              val por = new PutObjectRequest(bucket,
                 s"${part}/", CosFileSystem.emptyContent, CosFileSystem.metadata);
               cos.putObject(por)
               //TODO check result here
